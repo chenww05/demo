@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+<script type="text/javascript" src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
+<script type="text/javascript">
+var Todo = Backbone.Model.extend({
+	  // Default todo attribute values
+	  defaults: {
+	    id: 1,
+	    content: "john"
+	  }
+	});
+
+	var TodosCollection = Backbone.Collection.extend({
+	  model: Todo,
+	  url: '/demo/greeting?name=john'
+	});
+
+	var todos = new TodosCollection();
+	todos.fetch(); // sends HTTP GET to /todos
+	console.log(todos);
+	
+	var ListView = Backbone.View.extend({
+		  render: function(){
+
+		    // 假定items是model暴露的需要呈现的list
+		    var items = this.model.get('items');
+
+		    // Loop through each our items using the Underscore
+		    // _.each iterator
+		    _.each(items, function(item){
+
+		      // 创建一个新的ItemView实例，传入指定的model项
+		      var itemView = new ItemView({ model: item });
+		      // itemView的DOM元素渲染之后追加到ListView的el中。
+		      // 这里'return this'可帮助在render之后访问到它的输出("el")
+		      this.$el.append( itemView.render().el );
+		    }, this);
+		  }
+		});
+</script>
+</body>
+</html>
